@@ -27,12 +27,16 @@
 
 from CVRP_Clustering_V4 import CVRPSweepCluster, CVRPParser, generate_distance_matrix
 from typing import List, Dict, Tuple, Callable, Union, Optional
-import time 
-from dimod import BinaryQuadraticModel
+import time
 import numpy as np
 
 def create_tsp_bqm(distances, multiplier = 1):
     """Create a BQM for TSP with the given distance matrix"""
+    # Import here to avoid hard dependency when using fallback solver
+    try:
+        from dimod import BinaryQuadraticModel
+    except Exception as exc:
+        raise RuntimeError("dimod is required for quantum BQM path but is not installed") from exc
     n = len(distances)
     lagrange = np.mean(distances)
     bqm = BinaryQuadraticModel('BINARY')
@@ -88,6 +92,34 @@ def create_tsp_bqm(distances, multiplier = 1):
                 bqm.add_interaction(var_key(i, n-1), var_key(j, 0), distances[i, j])
     
     return bqm
+
+
+def solve_tsp_greedy_nearest_neighbor(distances: np.ndarray) -> Tuple[List[int], float]:
+    """Simple fallback TSP solver using nearest-neighbor heuristic.
+
+    Starts at city 0, repeatedly visits the nearest unvisited city.
+    Returns the tour as indices and total length including return to start.
+    """
+    n_cities = distances.shape[0]
+    if n_cities == 0:
+        return [], 0.0
+    unvisited = set(range(n_cities))
+    tour: List[int] = []
+    current = 0
+    tour.append(current)
+    unvisited.remove(current)
+
+    while unvisited:
+        next_city = min(unvisited, key=lambda j: distances[current, j])
+        tour.append(next_city)
+        unvisited.remove(next_city)
+        current = next_city
+
+    # compute length including return to start
+    total_length = 0.0
+    for i in range(n_cities):
+        total_length += distances[tour[i], tour[(i+1) % n_cities]]
+    return tour, float(total_length)
 
 def decode_solution(solution, n_cities):
     """
@@ -220,33 +252,42 @@ def run_Solver(distances, multiplier, nodes=None):
     length : float
         Total length of the optimized tour
     """
-    fact = 1 
-    bqm = create_tsp_bqm(distances/fact, multiplier=multiplier)
-    # print(bqm)
-    Q, offset = bqm.to_qubo()
-
-    #******* Running on Quanfluence Server *********
-    from quanfluence_sdk import QuanfluenceClient
-
-    client = QuanfluenceClient()
+    # Try quantum/BQM path first only if dependencies are available; otherwise fallback
+    use_quantum = True
     try:
-        client.signin('pranatree_user0', 'Pranatree@123')  #To be updated, please request for login credentials from quanfluence
-        device_id = 18                        # Please Request from quanfluence or setup with API calls 
-        result = client.execute_device_qubo_input(device_id, Q)
+        # Check both packages
+        import importlib
+        importlib.import_module('dimod')
+        importlib.import_module('quanfluence_sdk')
     except Exception:
-        print("Please use appropriate login credentials")
-    
-    print(f'Result:{result}')
-    spin_opt, energy_opt = result['result'], result['energy'] + offset 
-    #************************************************************
-    spin_opt = dict_to_numpy(spin_opt, size=len(distances)**2)  
-    solution_array = (1+spin_opt)/2
-    
-    # Decode the solution to get the tour (indices)
-    tour_indices = decode_solution(solution_array, len(distances))
-    
-    # Calculate tour length
-    length = calculate_tour_length(tour_indices, distances)
+        use_quantum = False
+
+    if use_quantum:
+        fact = 1
+        bqm = create_tsp_bqm(distances / fact, multiplier=multiplier)
+        Q, offset = bqm.to_qubo()
+
+        #******* Running on Quanfluence Server *********
+        from quanfluence_sdk import QuanfluenceClient
+
+        client = QuanfluenceClient()
+        try:
+            client.signin('pranatree_user0', 'Pranatree@123')  # Replace with valid creds
+            device_id = 18
+            result = client.execute_device_qubo_input(device_id, Q)
+        except Exception:
+            # If remote solve fails, fallback to greedy
+            print("Quanfluence execution failed; using greedy fallback")
+            tour_indices, length = solve_tsp_greedy_nearest_neighbor(distances)
+        else:
+            print(f'Result:{result}')
+            spin_opt, energy_opt = result['result'], result['energy'] + offset
+            spin_opt = dict_to_numpy(spin_opt, size=len(distances)**2)
+            solution_array = (1 + spin_opt) / 2
+            tour_indices = decode_solution(solution_array, len(distances))
+            length = calculate_tour_length(tour_indices, distances)
+    else:
+        tour_indices, length = solve_tsp_greedy_nearest_neighbor(distances)
     
     # If nodes mapping is provided, map the tour indices to actual node IDs
     if nodes is not None:

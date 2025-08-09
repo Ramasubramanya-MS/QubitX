@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: qubitx-backend:latest
+    container_name: qubitx-backend
+    ports:
+      - "8001:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./Map_Datasets:/app/Map_Datasets
+
+  frontend:
+    build:
+      context: ./qubitx
+      dockerfile: Dockerfile.frontend
+      args:
+        VITE_API_BASE: /api
+    image: qubitx-frontend:latest
+    container_name: qubitx-frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+

@@ -1,4 +1,5 @@
 from pathlib import Path
+import time
 from typing import Dict, List, Optional, Union
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -33,7 +34,8 @@ BASE_DIR = Path(__file__).resolve().parent
 MAP_DIR  = BASE_DIR / "Map_Datasets"
 MAP_DIR.mkdir(parents=True, exist_ok=True)
 
-SOLVER_PATH = Path(r"C:\Users\USER\Documents\Quantum UI Ordered\CVRP_Solver.py")
+# Use repository-local solver by default (works in Docker and locally)
+SOLVER_PATH = BASE_DIR / "CVRP_Solver.py"
 SOLUTION_PATH = BASE_DIR / "CVRP_solution.txt"  # your solver writes here
 
 def write_problem_file(req: ProblemRequest) -> Path:
@@ -43,7 +45,8 @@ def write_problem_file(req: ProblemRequest) -> Path:
         if str(k).strip().lstrip("-").isdigit()
     }
 
-    name = f"E-n{req.depots}-k{req.fleet}"
+    # Avoid clobbering existing dataset files; write to a unique, generated filename
+    name = f"UI-n{req.depots}-k{req.fleet}-{int(time.time())}"
     out_path = MAP_DIR / f"{name}.txt"
 
     lines: List[str] = []

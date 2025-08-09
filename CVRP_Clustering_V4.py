@@ -28,10 +28,8 @@
 
 import numpy as np
 from typing import List, Dict, Tuple
-import matplotlib.pyplot as plt
 import math
 import re
-from scipy.spatial import ConvexHull
 import math 
 from typing import Dict, Tuple
 import numpy as np
@@ -235,6 +233,8 @@ class CVRPSweepCluster:
         return clusters, cluster_demands
     
     def plot_clusters(self, clusters: List[List[int]], show_demands: bool = True):
+        # Lazy import to avoid heavy dependency unless plotting is explicitly requested
+        import matplotlib.pyplot as plt
         """Visualize the clustering solution with sweep regions."""
         plt.figure(figsize=(12, 8))
         
