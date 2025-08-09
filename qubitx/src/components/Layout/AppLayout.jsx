@@ -4,11 +4,11 @@ import usePanelState from "../../hooks/usePanelState";
 import LeftPanel from "../Panels/LeftPanel";
 import RightPanel from "../Panels/RightPanel";
 import MapView from "../Map/MapView";
+import MiniQubitX from "./MiniQubitX"; // <-- add this
 
 export default function AppLayout() {
   const { isLeftOpen, isRightOpen, toggleLeft, toggleRight } = usePanelState();
 
-  // Panel sizes: collapsed 48px, expanded 320px
   const cssVars = useMemo(
     () => ({
       "--left-col": isLeftOpen ? "380px" : "0px",
@@ -21,7 +21,7 @@ export default function AppLayout() {
     <div className={styles.wrapper} style={cssVars}>
       <div className={styles.cardContainer}>
         <header className={styles.header}>
-          <strong>QubitX</strong>
+          <MiniQubitX /> {/* 👈 replaces <strong>QubitX</strong> */}
         </header>
 
         <div className={styles.shell}>

@@ -6,11 +6,11 @@
   --muted: rgba(233, 236, 255, 0.75);
 
   /* Accents (pulled from reference) */
-  --accent-left-1: #2ef2a5;   /* mint/green */
-  --accent-left-2: #34d3ff;   /* cyan */
+  --accent-left-1: #f97316;   /* mint/green */
+  --accent-left-2: #fdba74;   /* cyan */
 
-  --accent-right-1: #ff8a3d;  /* orange */
-  --accent-right-2: #ff44b5;  /* pink/magenta */
+  --accent-right-1: #2bb3c0;  /* orange */
+  --accent-right-2: #29c96d;  /* pink/magenta */
 
   /* Radii + shadows */
   --radius: 16px;

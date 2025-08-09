@@ -73,7 +73,8 @@ export default function MapView() {
         // place 2 arrowheads along each segment
         [0.6, 0.85].forEach(t => {
           const pos = interp(a, b, t);
-          arrows.push({ pos, angle: bearing(a, b), color: t.color || "#fff" });
+          const angle = (bearing(a, b) + 180) % 360;
+          arrows.push({ pos, angle, color: t.color || "#fff" });
         });
       }
       return { ...t, latlngs, arrows };
@@ -90,6 +91,15 @@ export default function MapView() {
     });
     return () => { offSet(); offToggle(); };
   }, []);
+  // Build a lookup of cityId → color from routes
+  const cityColorMap = {};
+  routes.forEach(rt => {
+    if (rt.visible && rt.latlngs) {
+      rt.nodes?.forEach(nodeId => {
+        cityColorMap[nodeId] = rt.color;
+      });
+    }
+  });
 
   return (
     <div className={styles.card} ref={cardRef}>
@@ -104,15 +114,24 @@ export default function MapView() {
 
           {/* Depot points */}
           {depots.map(p => (
-            <CircleMarker key={`d-${p.id ?? `${p.lat},${p.lng}`}`}
-              center={[p.lat, p.lng]} radius={6}
-              pathOptions={{ color:"#000", weight:1, fillColor:"#ffcc00", fillOpacity:1 }}>
+            <CircleMarker
+              key={`d-${p.id ?? `${p.lat},${p.lng}`}`}
+              center={[p.lat, p.lng]}
+              radius={6}
+              pathOptions={{
+                color: "#000",
+                weight: 1,
+                fillColor: cityColorMap[p.id] || "#ffcc00", // ← arrow color if visited
+                fillOpacity: 1
+              }}
+            >
               <Tooltip direction="top" offset={[0, -6]} opacity={0.9}>
                 <div style={{ fontWeight: 700 }}>#{p.id ?? "?"} — {p.name}</div>
                 {"demand" in p && <div>Demand: {p.demand}</div>}
               </Tooltip>
             </CircleMarker>
           ))}
+
 
           {/* Truck routes */}
           {routes.map(rt => (

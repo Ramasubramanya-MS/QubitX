@@ -34,6 +34,7 @@ MAP_DIR  = BASE_DIR / "Map_Datasets"
 MAP_DIR.mkdir(parents=True, exist_ok=True)
 
 SOLVER_PATH = Path(r"C:\Users\USER\Documents\Quantum UI Ordered\CVRP_Solver.py")
+CLASSICAL_SOLVER_PATH = Path(r"C:\Users\USER\Documents\Quantum UI Ordered\classical_OR_2.py")
 SOLUTION_PATH = BASE_DIR / "CVRP_solution.txt"  # your solver writes here
 
 def write_problem_file(req: ProblemRequest) -> Path:
@@ -72,7 +73,20 @@ def write_problem_file(req: ProblemRequest) -> Path:
     out_path.write_text("\n".join(lines), encoding="utf-8")
     return out_path
 
-def run_solver(problem_path: Path, timeout_sec: int = 300) -> Dict[str, str]:
+def execute_classical_solver(problem_path: Path, timeout_sec: int = 300) -> Dict[str, str]:
+    """
+    Calls: python CVRP_Solver.py <problem_path>
+    Returns captured stdout/stderr for debugging in UI if needed.
+    """
+    if not CLASSICAL_SOLVER_PATH.exists():
+        return {"stdout": "", "stderr": f"Solver not found: {CLASSICAL_SOLVER_PATH}"}
+
+    # Use the same interpreter that runs FastAPI (good for venvs)
+    cmd = [sys.executable, str(CLASSICAL_SOLVER_PATH), str(problem_path)]
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout_sec)
+    return {"stdout": proc.stdout, "stderr": proc.stderr}
+
+def execute_quantum_solver(problem_path: Path, timeout_sec: int = 300) -> Dict[str, str]:
     """
     Calls: python CVRP_Solver.py <problem_path>
     Returns captured stdout/stderr for debugging in UI if needed.
@@ -132,7 +146,7 @@ def run_quantum_solver(req: ProblemRequest):
     print(problem_path)
     # 2) run solver
     try:
-        run_out = run_solver(problem_path, timeout_sec=600)
+        run_out = execute_quantum_solver(problem_path, timeout_sec=600)
     except subprocess.TimeoutExpired:
         return JSONResponse(
             status_code=504,
@@ -165,32 +179,44 @@ def run_quantum_solver(req: ProblemRequest):
         "paths": parsed["paths"],
         "summary": parsed["summary"],
     })
+
 @app.post("/run_or_solver")
 def run_or_solver(req: ProblemRequest):
-    # Normalize demands keys to int (same as in generate_problem)
-    demand_map = {
-        int(k): int(v) for k, v in (req.demands or {}).items()
-        if str(k).strip().lstrip("-").isdigit()
-    }
+    # 1) write problem file
+    problem_path = write_problem_file(req)
+    print(problem_path)
+    # 2) run solver
+    try:
+        run_out = execute_classical_solver(problem_path, timeout_sec=600)
+    except subprocess.TimeoutExpired:
+        return JSONResponse(
+            status_code=504,
+            content={
+                "ok": False,
+                "message": "Solver timed out.",
+                "problemFile": problem_path.name,
+            },
+        )
+    except subprocess.CalledProcessError as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "ok": False,
+                "message": "Solver crashed.",
+                "problemFile": problem_path.name,
+                "stderr": getattr(e, "stderr", ""),
+            },
+        )
+    # 3) parse solution file if your classical solver writes one
+    # parsed = parse_solution(SOLUTION_PATH)
 
-    # Log what we received (you'll see this in the FastAPI console)
-    print("[/run_or_solver] params:",
-          {"depots": req.depots, "capacity": req.capacity, "fleet": req.fleet})
-    print("[/run_or_solver] cities:", len(req.cities))
-    if req.cities:
-      print("  first 3 cities:", [c.name for c in req.cities[:3]])
-    print("[/run_or_solver] demands sample:", dict(list(demand_map.items())[:5]))
-
-    # TODO: call your actual OR-Tools solver here with req
-    # For now, return a tiny summary so UI shows something.
-    total_demand = sum(demand_map.values())
-    summary = {
-        "Total distance": f"{total_demand:.2f}",
-        "Total runtime":  "0.00",
-    }
-
+    # 4) respond (mirror /run_quantum_solver shape)
     return JSONResponse({
         "ok": True,
-        "message": "OR Solver request received.",
-        "summary": summary
+        "message": f"Saved {problem_path.name} and ran classical OR solver.",
+        "problemFile": problem_path.name,
+        "solverStdout": run_out.get("stdout", ""),
+        "solverStderr": run_out.get("stderr", ""),
+        # "paths": parsed["paths"],
+        # "summary": parsed["summary"],
     })

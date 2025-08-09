@@ -1,0 +1,88 @@
+/* Full-page vertical snap scroller */
+.qx-root {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  background: #0b0e17; /* matches your app bg */
+}
+
+/* Each screen fills viewport and snaps cleanly */
+.screen {
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+  position: relative;
+}
+
+/* Prevent any “bleed” overlap */
+.screen > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Keep fixed parallax shapes behind content but inside their section */
+#hero .bg-circle-1,
+#hero .bg-circle-2,
+#hero .bg-circle-3 {
+  z-index: 0;
+}
+
+/* Ensure pinned map timeline can’t spill into other sections */
+#challenge {
+  contain: content; /* isolate paint/layout; keeps pinning local */
+}
+
+/* If your AppLayout uses position tricks, keep it inside the section */
+#app > div {
+  height: 100%;
+}
+
+/* Optional: hide native scrollbars on WebKit for a cleaner look */
+.qx-root::-webkit-scrollbar { width: 10px; }
+.qx-root::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 8px; }
+.qx-root::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+
+/* If Tailwind isn’t present, minimal fallbacks for utilities used above: */
+.bg-slate-900 { background-color: #0f172a; }
+.from-slate-900 { background-color: #0f172a; }
+.to-slate-800 { background-color: #1e293b; }
+.text-white { color: #fff; }
+.text-slate-300 { color: #cbd5e1; }
+.bg-gray-800 { background-color: #1f2937; }
+.bg-gray-700 { background-color: #374151; }
+.bg-gray-900 { background-color: #111827; }
+.border { border: 1px solid rgba(255,255,255,0.2); }
+.rounded-full { border-radius: 999px; }
+.rounded-lg { border-radius: 0.75rem; }
+.rounded-sm { border-radius: 0.125rem; }
+.opacity-10 { opacity: 0.10; }
+.opacity-15 { opacity: 0.15; }
+.opacity-20 { opacity: 0.20; }
+.opacity-25 { opacity: 0.25; }
+.opacity-40 { opacity: 0.40; }
+.opacity-60 { opacity: 0.60; }
+.opacity-80 { opacity: 0.80; }
+
+/* Utility fallbacks (only if you don’t use Tailwind) */
+.fixed { position: fixed; } .absolute { position: absolute; } .relative { position: relative; }
+.top-8 { top: 2rem; } .left-8 { left: 2rem; } .top-20 { top: 5rem; } .left-20 { left: 5rem; }
+.right-20 { right: 5rem; } .bottom-40 { bottom: 10rem; } .left-1\/3 { left: 33.333%; }
+.w-96 { width: 24rem; } .h-96 { height: 24rem; } .w-64 { width: 16rem; } .h-64 { height: 16rem; }
+.w-80 { width: 20rem; } .h-80 { height: 20rem; }
+.z-10 { z-index: 10; } .z-20 { z-index: 20; }
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+.flex { display: flex; } .items-center { align-items: center; } .justify-center { justify-content: center; }
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.max-w-4xl { max-width: 56rem; }
+.px-8 { padding-left: 2rem; padding-right: 2rem; }
+.mb-8 { margin-bottom: 2rem; }
+.text-6xl { font-size: 3.75rem; line-height: 1; }
+.text-8xl { font-size: 6rem; line-height: 1; }
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.tracking-wider { letter-spacing: 0.05em; }
+.bg-clip-text { -webkit-background-clip: text; background-clip: text; }
+.text-transparent { color: transparent; }

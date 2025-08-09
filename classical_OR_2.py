@@ -302,28 +302,28 @@ def solve_cvrp_ortools(filename=None, k=8, time_limit_seconds=300):
         print(f"Total distance: {total_distance:.2f}")
         
         # Visualize solution
-        plt.figure(figsize=(12, 10))
+        # plt.figure(figsize=(12, 10))
         
         # Draw all nodes
-        nx.draw_networkx_nodes(G, pos=my_pos, node_color='lightblue', 
-                              node_size=50, alpha=0.7)
+        # nx.draw_networkx_nodes(G, pos=my_pos, node_color='lightblue', 
+        #                       node_size=50, alpha=0.7)
         
-        # Draw depot in different color
-        nx.draw_networkx_nodes(G, pos=my_pos, nodelist=[depot], 
-                              node_color='red', node_size=100)
+        # # Draw depot in different color
+        # nx.draw_networkx_nodes(G, pos=my_pos, nodelist=[depot], 
+                            #   node_color='red', node_size=100)
         
         # Draw solution edges
-        solution_graph = G.edge_subgraph(used_edges)
-        nx.draw_networkx_edges(solution_graph, pos=my_pos, edge_color='blue', 
-                              width=2, alpha=0.8)
+        # solution_graph = G.edge_subgraph(used_edges)
+        # nx.draw_networkx_edges(solution_graph, pos=my_pos, edge_color='blue', 
+        #                       width=2, alpha=0.8)
         
-        # Add node labels
-        nx.draw_networkx_labels(G, pos=my_pos, font_size=6)
+        # # Add node labels
+        # nx.draw_networkx_labels(G, pos=my_pos, font_size=6)
         
-        plt.title(f"CVRP Solution using OR-Tools\nVehicles: {k}, Distance: {total_distance:.2f}")
-        plt.axis('equal')
-        plt.grid(True, alpha=0.3)
-        plt.show()
+        # plt.title(f"CVRP Solution using OR-Tools\nVehicles: {k}, Distance: {total_distance:.2f}")
+        # plt.axis('equal')
+        # plt.grid(True, alpha=0.3)
+        # plt.show()
         
     else:
         print(f"No solution found. Status: {status}")
@@ -343,6 +343,7 @@ if __name__ == "__main__":
     # You can also solve using a file:
     import sys
     txt_file_path = sys.argv[1] if len(sys.argv) > 1 else "./Map_Datasets/E-n22-k4.txt"
+    # txt_file_path = "./Map_Datasets/E-n22-k4.txt"
     routes, distance, status = solve_cvrp_ortools(txt_file_path, k = 4 ,time_limit_seconds=20)
 
     print(f"\nFinal Results:")

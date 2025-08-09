@@ -46,3 +46,10 @@
 .center {
   min-height: 0;
 }
+.header {
+  /* existing header styles remain */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px; /* ensure room for the mini orbit */
+}
