@@ -1,0 +1,300 @@
+:root {
+  /* Base surface + text */
+  --bg: #0b0e17;
+  --panel: #0f1324;
+  --text: #e9ecff;
+  --muted: rgba(233, 236, 255, 0.75);
+
+  /* Accents (pulled from reference) */
+  --accent-left-1: #2ef2a5;   /* mint/green */
+  --accent-left-2: #34d3ff;   /* cyan */
+
+  --accent-right-1: #ff8a3d;  /* orange */
+  --accent-right-2: #ff44b5;  /* pink/magenta */
+
+  /* Radii + shadows */
+  --radius: 16px;
+  --panel-shadow: 0 10px 40px rgba(0,0,0,0.35);
+  --inner-stroke: rgba(255,255,255,0.06);
+}
+
+/* Layout shell styles live in your page/app CSS,
+   but make sure body has dark bg for the glow to read nicely */
+body { background: var(--bg); color: var(--text); }
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)) , var(--panel);
+  box-shadow: var(--panel-shadow);
+  overflow: visible; /* so the toggle + glow can bleed out */
+  min-width: 0;
+  isolation: isolate; /* so panel glow doesn't blend other panels */
+}
+
+/* Subtle internal border for glass feel */
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--inner-stroke);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Bottom "floor" glow (changes color by side) */
+.panel::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -32px;
+  width: 76%;
+  height: 64px;
+  filter: blur(30px);
+  opacity: 0.75;
+  pointer-events: none;
+  border-radius: 100px;
+  z-index: 0;
+}
+
+/* Side-specific tints + bottom glow colors */
+.left  { --accent-1: var(--accent-left-1);  --accent-2: var(--accent-left-2); }
+.right { --accent-1: var(--accent-right-1); --accent-2: var(--accent-right-2); }
+
+.left::after {
+  background: radial-gradient(60% 100% at 50% 50%, color-mix(in oklab, var(--accent-1) 70%, transparent), transparent 70%);
+}
+.right::after {
+  background: radial-gradient(60% 100% at 50% 50%, color-mix(in oklab, var(--accent-1) 70%, transparent), transparent 70%);
+}
+
+/* Closed state keeps toggle clickable but removes chrome */
+.closed {
+  border: 0;
+  box-shadow: none;
+  pointer-events: none;
+}
+.closed .header,
+.closed .content { display: none; }
+.toggle { pointer-events: auto; z-index: 40; }
+
+/* Header + content */
+.header {
+  padding: 12px 16px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  position: relative;
+  z-index: 1;
+}
+.content {
+  flex: 1;
+  padding: 14px 16px;
+  overflow: auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Toggle --- */
+.toggle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  border: 1px solid var(--inner-stroke);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(120% 120% at 50% 50%, rgba(255,255,255,0.06), transparent 60%),
+    #000;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.55),
+    0 0 0 6px rgba(255,255,255,0.02) inset;
+}
+.leftToggle { right: -22px; }
+.rightToggle { left: -22px; }
+
+.toggle:hover { transform: translateY(-50%) scale(1.05); }
+.toggle:active { transform: translateY(-50%) scale(0.98); }
+
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: #fff;
+  opacity: 0.95;
+  transition: transform 160ms ease;
+}
+.rotate .icon { transform: rotate(180deg); }
+
+/* --- Sections --- */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+/* Gradient “hero” kicker like the site */
+.kicker {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  line-height: 1.05;
+  text-transform: none;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.subtitle {
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+/* Stats */
+.statRow {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  align-items: center;
+  gap: 12px;
+}
+.statLabel {
+  font-size: 18px;
+  color: var(--text);
+  font-weight: 600;
+  opacity: 0.95;
+}
+.statValue {
+  height: 46px;
+  border-radius: 12px;
+  border: 0;
+  padding: 0 12px;
+  background: rgba(255,255,255,0.12);
+  color: #07111a;
+  font-weight: 800;
+  text-align: right;
+  outline: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.14),
+    inset 0 -12px 24px rgba(255,255,255,0.18);
+}
+
+/* Primary button with accent glow */
+.primaryBtn {
+  height: 52px;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  color: #0a0a0a;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.0)),
+    linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.45),
+    0 0 0 1px rgba(255,255,255,0.06) inset;
+}
+.primaryBtn:hover { filter: brightness(1.05); }
+.primaryBtn:active { transform: translateY(1px); }
+
+/* Glass card (paths + summary) */
+.card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: inset 0 0 0 1px var(--inner-stroke);
+}
+
+.pathHeader {
+  font-weight: 700;
+  color: var(--text);
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.pathList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.checkRow {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 10px;
+  align-items: flex-start;
+  color: var(--text);
+}
+.checkRow input[type="checkbox"] {
+  accent-color: var(--accent-1);
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+.routeLine { font-size: 12.8px; line-height: 1.35; opacity: 0.98; }
+.routeLine .mono { font-weight: 700; }
+
+/* Loader + messages */
+.loaderRow {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-weight: 600;
+}
+.spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: #fff;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.msgSuccess, .msgError {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+.msgSuccess {
+  background: rgba(16, 185, 129, 0.15);
+  color: #a7f3d0;
+}
+.msgError {
+  background: rgba(239, 68, 68, 0.16);
+  color: #fecaca;
+}
+
+/* Summary */
+.summaryCard { margin-top: 12px; }
+.summaryRow {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(255,255,255,0.08);
+}
+.summaryRow:last-child { border-bottom: none; }
+.summaryKey { opacity: 0.8; }
+.summaryVal { font-weight: 800; }
+
+/* Keep for module selectors used by PanelToggle */
+.leftToggle { right: -21px; }
+.rightToggle { left: -21px; }
+.statValue[readonly] {
+  color: #fff; /* or a bright contrasting color */
+  font-weight: 6000; /* makes it bolder */
+  opacity: 1;       /* ensure full visibility */
+  font-size: 22px;
+}

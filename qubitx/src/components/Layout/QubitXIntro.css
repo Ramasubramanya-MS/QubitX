@@ -1,0 +1,489 @@
+/* QubitXIntro.css */
+
+.intro-container {
+  min-height: 200vh;
+  background: #0f172a;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Fixed Logo */
+.fixed-logo {
+  position: fixed;
+  top: 32px;
+  left: 32px;
+  z-index: 50;
+  opacity: 0;
+  transform: scale(0.75);
+}
+
+.logo-wrapper {
+  position: relative;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: 300;
+  color: white;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.logo-x {
+  font-weight: 400;
+}
+
+.logo-orbit {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-dot {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.logo-dot-1 {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  box-shadow: 0 0 4px rgba(16, 185, 129, 0.5);
+}
+
+.logo-dot-2 {
+  width: 6px;
+  height: 6px;
+  background: #6ee7b7;
+}
+
+.logo-rectangle {
+  position: absolute;
+  width: 24px;
+  height: 16px;
+  border: 1px solid #10b981;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+.logo-circle {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #10b981;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+/* Hero Section */
+.hero-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+}
+
+.hero-title {
+  font-size: 128px;
+  font-weight: 300;
+  color: white;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.hero-x {
+  font-weight: 400;
+}
+
+.orbit-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orbit-dot {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.orbit-dot-1 {
+  width: 16px;
+  height: 16px;
+  background: #10b981;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+}
+
+.orbit-dot-2 {
+  width: 12px;
+  height: 12px;
+  background: #6ee7b7;
+  box-shadow: 0 0 12px rgba(110, 231, 183, 0.4);
+}
+
+.orbit-rectangle {
+  position: absolute;
+  width: 128px;
+  height: 80px;
+  border: 2px solid #10b981;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rect-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+}
+
+.rect-dot-tl { top: 8px; left: 8px; }
+.rect-dot-tr { top: 8px; right: 8px; }
+.rect-dot-bl { bottom: 8px; left: 8px; }
+.rect-dot-br { bottom: 8px; right: 8px; }
+
+.orbit-circle {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border: 2px solid #10b981;
+  border-radius: 50%;
+}
+
+/* Map Section */
+.map-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.map-content {
+  text-align: center;
+  color: white;
+  max-width: 1024px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.map-title {
+  font-size: 72px;
+  font-weight: 300;
+  margin-bottom: 48px;
+  background: linear-gradient(to right, #10b981, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.map-subtitle {
+  font-size: 32px;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.map-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-viewport {
+  width: 100%;
+  height: 100%;
+  background: #374151;
+  overflow: hidden;
+}
+
+.map-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Small Region */
+.small-region-box {
+  position: relative;
+  width: 384px;
+  height: 384px;
+  background: #4b5563;
+  border-radius: 8px;
+  border: 2px solid #6b7280;
+}
+
+.building {
+  position: absolute;
+  background: #6b7280;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.building-1 { top: 48px; left: 48px; width: 32px; height: 48px; }
+.building-2 { top: 48px; left: 96px; width: 24px; height: 32px; background: #9ca3af; }
+.building-3 { top: 128px; left: 32px; width: 48px; height: 64px; }
+
+.road {
+  position: absolute;
+  background: #3b82f6;
+}
+
+.road-h {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  transform: translateY(-50%);
+}
+
+.road-v {
+  top: 0;
+  left: 50%;
+  width: 4px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.truck {
+  position: absolute;
+  width: 12px;
+  height: 24px;
+  background: #f59e0b;
+  border-radius: 2px;
+}
+
+.truck-1 { top: 50%; left: 32px; transform: translateY(-50%); }
+.truck-2 { top: 25%; right: 48px; transform: rotate(90deg); }
+.truck-3 { bottom: 64px; left: 33.33%; }
+
+.truck-path {
+  position: absolute;
+  height: 2px;
+  background: #f59e0b;
+  opacity: 0.6;
+  left: 0;
+  top: 50%;
+}
+
+.truck-path-1 { width: 128px; }
+.truck-path-2 { width: 96px; transform: rotate(-90deg); }
+.truck-path-3 { width: 80px; }
+
+/* Medium Region */
+.medium-region {
+  opacity: 0;
+}
+
+.road-h-main {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #3b82f6;
+  transform: translateY(-50%);
+}
+
+.road-v-1 {
+  position: absolute;
+  top: 0;
+  left: 33.33%;
+  width: 2px;
+  height: 100%;
+  background: #3b82f6;
+}
+
+.road-v-2 {
+  position: absolute;
+  top: 0;
+  left: 66.66%;
+  width: 2px;
+  height: 100%;
+  background: #3b82f6;
+}
+
+.road-h-1 {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #60a5fa;
+}
+
+.road-h-2 {
+  position: absolute;
+  top: 75%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #60a5fa;
+}
+
+.medium-truck-1 { top: 50%; left: 48px; width: 8px; height: 12px; background: #f59e0b; }
+.medium-truck-2 { top: 25%; left: 25%; width: 8px; height: 12px; background: #f59e0b; }
+.medium-truck-3 { top: 75%; right: 25%; width: 8px; height: 12px; background: #f59e0b; }
+.medium-truck-4 { top: 48px; right: 48px; width: 8px; height: 12px; background: #f59e0b; }
+.medium-truck-5 { bottom: 48px; left: 33.33%; width: 8px; height: 12px; background: #f59e0b; }
+.medium-truck-6 { bottom: 80px; right: 64px; width: 8px; height: 12px; background: #f59e0b; }
+.medium-truck-7 { top: 33.33%; left: 50%; width: 8px; height: 12px; background: #f59e0b; }
+.medium-truck-8 { bottom: 33.33%; left: 64px; width: 8px; height: 12px; background: #f59e0b; }
+
+/* City Region */
+.city-region {
+  opacity: 0;
+  background: #111827;
+}
+
+.highway {
+  position: absolute;
+  background: #3b82f6;
+}
+
+.highway-h { top: 50%; left: 0; width: 100%; height: 4px; }
+.highway-v { top: 0; left: 50%; width: 4px; height: 100%; }
+.highway-h1 { top: 25%; left: 0; width: 100%; height: 2px; background: #60a5fa; }
+.highway-h2 { top: 75%; left: 0; width: 100%; height: 2px; background: #60a5fa; }
+.highway-v1 { top: 0; left: 25%; width: 2px; height: 100%; background: #60a5fa; }
+.highway-v2 { top: 0; left: 75%; width: 2px; height: 100%; background: #60a5fa; }
+
+.building-cluster {
+  position: absolute;
+  background: #4b5563;
+  opacity: 0.8;
+}
+
+.cluster-1 { top: 16px; left: 16px; width: 64px; height: 64px; }
+.cluster-2 { top: 16px; right: 16px; width: 48px; height: 80px; background: #6b7280; }
+.cluster-3 { bottom: 16px; left: 16px; width: 80px; height: 48px; }
+.cluster-4 { bottom: 16px; right: 16px; width: 64px; height: 64px; background: #6b7280; }
+
+/* City trucks - positioned in a grid pattern */
+.city-truck {
+  position: absolute;
+  width: 6px;
+  height: 8px;
+  background: #ef4444;
+}
+
+.city-truck-1 { top: 32px; left: 32px; }
+.city-truck-2 { top: 64px; left: 96px; }
+.city-truck-3 { top: 96px; right: 64px; }
+.city-truck-4 { top: 128px; left: 25%; }
+.city-truck-5 { top: 160px; right: 25%; }
+.city-truck-6 { top: 50%; left: 48px; background: #fbbf24; }
+.city-truck-7 { top: 50%; right: 80px; background: #fbbf24; }
+.city-truck-8 { bottom: 128px; left: 64px; background: #fbbf24; }
+.city-truck-9 { bottom: 96px; right: 96px; background: #fbbf24; }
+.city-truck-10 { bottom: 64px; left: 25%; background: #fbbf24; }
+.city-truck-11 { bottom: 32px; right: 25%; background: #fbbf24; }
+.city-truck-12 { top: 25%; left: 50%; }
+.city-truck-13 { top: 75%; left: 25%; }
+.city-truck-14 { top: 33.33%; right: 50%; }
+.city-truck-15 { bottom: 25%; right: 25%; }
+.city-truck-16 { top: 48px; left: 33.33%; }
+.city-truck-17 { bottom: 48px; left: 66.66%; }
+.city-truck-18 { top: 66.66%; left: 32px; }
+.city-truck-19 { bottom: 33.33%; right: 32px; }
+.city-truck-20 { top: 80px; right: 33.33%; }
+.city-truck-21 { bottom: 80px; left: 50%; }
+.city-truck-22 { top: 40%; left: 80px; background: #fbbf24; }
+.city-truck-23 { bottom: 40%; right: 80px; background: #fbbf24; }
+.city-truck-24 { top: 60%; right: 40%; }
+.city-truck-25 { bottom: 60%; left: 40%; }
+
+/* Progress Indicator */
+.progress-container {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.zoom-indicator {
+  width: 12px;
+  height: 12px;
+  background: #4b5563;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.zoom-indicator.active {
+  background: #10b981;
+}
+
+/* Complexity Counter */
+.complexity-counter {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  background: rgba(30, 41, 59, 0.9);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.counter-label {
+  color: #10b981;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.route-counter {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+}
+
+.counter-complexity {
+  color: #94a3b8;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 64px;
+  }
+  
+  .map-title {
+    font-size: 48px;
+  }
+  
+  .map-subtitle {
+    font-size: 20px;
+  }
+  
+  .small-region-box {
+    width: 300px;
+    height: 300px;
+  }
+}

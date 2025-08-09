@@ -1,0 +1,19 @@
+.card {
+  height: 100%;
+  width: 100%;
+  background: #0d0d0f;
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  position: relative;
+}
+
+.mapRoot {
+  height: 100%;
+  width: 100%;
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}

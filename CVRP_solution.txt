@@ -1,0 +1,29 @@
+Problem: C:\Users\USER\Documents\Quantum UI Ordered\Map_Datasets\E-n22-k4.txt
+Number of nodes: 22
+Number of vehicles: 4
+Vehicle capacity: 6000
+
+CLUSTER SOLUTIONS
+=================
+
+Cluster 1:
+Path: [8, 4, 1, 11, 13, 20]
+Length: 6434.64
+
+Cluster 2:
+Path: [19, 22, 5, 2, 1, 15, 16, 10]
+Length: 9924.35
+
+Cluster 3:
+Path: [1, 17, 14, 6]
+Length: 6397.44
+
+Cluster 4:
+Path: [7, 1, 18, 9, 3, 12, 21]
+Length: 9375.50
+
+SUMMARY
+=======
+Total distance: 32131.93
+Total runtime: 14.68 seconds
+Average runtime: 2.94 seconds

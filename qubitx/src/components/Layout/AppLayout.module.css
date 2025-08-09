@@ -1,0 +1,48 @@
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* center horizontally */
+  justify-content: center; /* center vertically */
+  background: var(--bg);
+  padding: 20px; /* space around the whole thing */
+}
+
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  background: var(--bg);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  padding: var(--gap);
+
+  /* Limit size and center the content area */
+  max-width: clamp(1600px, 94vw, 2400px);
+  max-height: 90vh;
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  background: #0c0c0c;
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  min-height: 40px;
+}
+
+.shell {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--left-col) 1fr var(--right-col);
+  gap: var(--gap);
+  min-height: 0;
+}
+
+.center {
+  min-height: 0;
+}
