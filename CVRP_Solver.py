@@ -232,6 +232,7 @@ def run_Solver(distances, multiplier, nodes=None):
     try:
         client.signin('pranatree_user0', 'Pranatree@123')  #To be updated, please request for login credentials from quanfluence
         device_id = 18                        # Please Request from quanfluence or setup with API calls 
+        device = client.update_device(device_id,{'description':'001'})
         result = client.execute_device_qubo_input(device_id, Q)
     except Exception:
         print("Please use appropriate login credentials")
